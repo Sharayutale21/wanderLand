@@ -24,7 +24,7 @@ const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js")
 
 //connect to db
-const dbUrl = process.env.ATLASDB_URL
+const MONGO_URL = 'mongodb://127.0.0.1:27017/wonderland'
 main().then(()=>{
 	console.log("connected to db")
 }).catch((err)=>{
@@ -32,25 +32,12 @@ main().then(()=>{
 })
 
 async function main(){
-	await mongoose.connect(dbUrl)
+	await mongoose.connect(MONGO_URL)
 }
 
-const store = MongoStore.create({
-	mongoUrl: dbUrl,
-	crypto:{
-		secret : process.env.SECRET,
-
-	},
-	touchAfter:24*3600
-})
-
-
-store.on("error",()=>{
-	console.log("error in mongo session store",err)
-})
 
 const sessionOptions ={
-	store,
+	
 	secret : process.env.SECRET,
 	resave : false,
 	saveUninitialized : true,
